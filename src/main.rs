@@ -95,14 +95,7 @@ fn handle_connection(mut stream: std::net::TcpStream) -> Result<(), Box<dyn Erro
     Ok(())
 }
 
-fn not_found_response() -> String {
-    let body = "<h1>404 — Страница не найдена</h1>";
-    format!(
-        "HTTP/1.1 404 NOT FOUND\r\nContent-Length: {}\r\n\r\n{}",
-        body.len(),
-        body
-    )
-}
+
 
 fn log_to_file(message: &str) -> Result<(), Box<dyn Error>> {
 
@@ -115,6 +108,25 @@ fn log_to_file(message: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+fn not_found_response() -> String {
+    let body = r#"<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница не найдена</title>
+</head>
+<body>
+    <h1>404 — Страница не найдена</h1>
+    <p>Такой страницы не существует. Попробуйте <a href="/">вернуться на главную</a>.</p>
+</body>
+</html>"#;
+
+    format!(
+        "HTTP/1.1 404 NOT FOUND\r\nContent-Length: {}\r\n\r\n{}",
+        body.len(),
+        body
+    )
+}
 fn get_formatted_time() -> String {
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
