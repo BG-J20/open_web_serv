@@ -133,15 +133,26 @@ fn handle_register(request: &str, stream: &mut TcpStream) -> Result<(), Box<dyn 
     let password = form_data.get("password").cloned().unwrap_or_default();
 
     let hash = hash_password(&password);
-
     let conn = Connection::open("users.db")?;
+
+    //проверка существует ли пользователь
+    let mut stmt = conn.prepare("SELECT COUNT(*) FROM users WHERE username = ?1")?;
+    let mut rows = stmt.query(params![username])?;
+    if let Some(row) = rows.next()? {
+        let count: i64 = row.get(0)?;
+        if count > 0 {
+            return serve_file("user_exists.html", stream);
+        }
+    }
+
+    //if not users
     let result = conn.execute(
         "INSERT INTO users (username, password_hash) VALUES (?1, ?2)",
         params![username, hash],
     );
 
     match result {
-        Ok(_) => serve_file("welcome.html", stream),
+        Ok(_) => serve_file("registered.html", stream),
         Err(_) => serve_file("unauthorized.html", stream),
     }
 
