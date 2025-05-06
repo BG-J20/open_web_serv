@@ -6,12 +6,33 @@ use std::fs::OpenOptions;         //открывает файл для доза�
 use std::time::{SystemTime, UNIX_EPOCH}; //получает текущее время
 use std::ffi::CStr;
 use libc::{time_t, tm};
+use rusqlite::{params, Connection, Result};
+use sha2::{Digest, Sha256};
+use urlencoding::decode;
+use std::collections::HashMap;
+
 
 extern "C" {
     fn localtime(time: *const time_t) -> *mut tm;
 }
 
+fn init_db() -> Result<()> {
+    let conn = Connection::open("users.db")?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS users (\
+            id INTEGER PRIMARY KEY,\
+            username TEXT NOT NULL UNIQUE,\
+            password_hash TEXT NOT NULL\
+            )",
+        [],
+
+    )?;
+    Ok(())
+}
 fn main() -> Result<(), Box<dyn Error>>{
+
+    init_db()?;
+
     let listener = TcpListener::bind("127.0.0.1:7878")?;
     println!("Listening for connections on port 7878");
 
@@ -88,6 +109,15 @@ fn handle_connection(mut stream: std::net::TcpStream) -> Result<(), Box<dyn Erro
         not_found_response()
     };
 
+    //work with POST requestions
+    if request.starts_with("POST /register"){
+        return handle_register(&request, &mut stream);
+    } else if request.starts_with("POST /login"){
+        return handle_login(&request, &mut stream);
+    } else if path == "/register" {
+        return serve_file("register.html", &mut stream);
+    }
+
     stream.write_all(response.as_bytes())?;
     stream.flush()?;
 
@@ -95,7 +125,27 @@ fn handle_connection(mut stream: std::net::TcpStream) -> Result<(), Box<dyn Erro
     Ok(())
 }
 
+fn handle_register(request: &str, stream: &mut TcpStream) -> Result<(), Box<dyn Error>> {
 
+    let body = request.split("\r\n\r\n").nth(1).unwrap_or(" ");
+    let form_data = parse_form_data(body);
+    let username = form_data.get("username").cloned().unwrap_or_default();
+    let password = form_data.get("password").cloned().unwrap_or_default();
+
+    let hash = hash_password(&password);
+
+    let conn = Connection::open("users.db")?;
+    let result = conn.execute(
+        "INSERT INTO users (username, password_hash) VALUES (?1, ?2)",
+        params![username, hash],
+    );
+
+    match result {
+        Ok(_) => serve_file("welcome.html", stream),
+        Err(_) => serve_file("unauthorized.html", stream),
+    }
+
+}
 
 fn log_to_file(message: &str) -> Result<(), Box<dyn Error>> {
 
@@ -154,4 +204,88 @@ fn get_formatted_time() -> String {
             tm.tm_sec
         )
     }
+}
+
+/// Определяет Content-Type по расширению файла
+fn get_content_type(path: &str) -> &str {
+    if path.ends_with(".html") {
+        "text/html"
+    } else if path.ends_with(".css") {
+        "text/css"
+    } else if path.ends_with(".js") {
+        "application/javascript"
+    } else if path.ends_with(".png") {
+        "image/png"
+    } else if path.ends_with(".jpg") || path.ends_with(".jpeg") {
+        "image/jpeg"
+    } else if path.ends_with(".txt") {
+        "text/plain"
+    } else {
+        "application/octet-stream" // по умолчанию — бинарные данные
+    }
+}
+
+fn handle_login(request: &str, stream: &mut TcpStream) -> Result<(), Box<dyn Error>> {
+
+    let body = request.split("\r\n\r\n").nth(1).unwrap_or(" ");
+    let from_data = parse_form_data(body);
+    let username = from_data.get("username").cloned().unwrap_or_default();
+    let password = from_data.get("password").cloned().unwrap_or_default();
+
+    let hash = hash_password(&password);
+
+    let conn = Connection::open("users.db")?;
+    let mut stmt = conn.prepare("SELECT COUNT(*) FROM users WHERE username = ?1 AND password_hash = ?2")?;
+    let mut rows = stmt.query(params![username, hash])?;
+
+    if let Some(row) = rows.next()? {
+        let count: i64 = row.get(0)?;
+        if count > 0 {
+            serve_file("welcome.html", stream)?;
+        } else {
+            serve_file("unauthorized.html", stream)?;
+        }
+    }
+    Ok(())
+
+}
+
+fn parse_form_data(body: &str) -> HashMap<String, String> {
+
+    let mut data = HashMap::new();
+
+    for pair in body.split("&") {
+        let mut split = pair.splitn(2, '=');
+        if let (Some(k), Some(v)) = (split.next(), split.next()) {
+            let key = decode(k).unwrap_or_default().to_string();
+            let val = decode(v).unwrap_or_default().to_string();
+            data.insert(key, val);
+        }
+    }
+    data
+}
+
+fn hash_password(password: &str) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(password.as_bytes());
+    format!("{:x}", hasher.finalize())
+}
+
+fn serve_file(filename: &str, stream: &mut TcpStream) -> Result<(), Box<dyn Error>> {
+    match std::fs::read_to_string(filename) {
+        Ok(contents) => {
+            let response = format!(
+                "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+                contents.len(),
+                contents
+            );
+            stream.write_all(response.as_bytes())?;
+        }
+        Err(_) => {
+            let response = not_found_response();
+            stream.write_all(response.as_bytes())?;
+        }
+    }
+    stream.flush()?;
+    Ok(())
 }
