@@ -1,3 +1,6 @@
+
+//mod handlers;
+
 use std::net::{TcpListener, TcpStream};
 use std::io::{Read, Write};
 use std::thread;
@@ -10,6 +13,7 @@ use rusqlite::{params, Connection, Result};
 use sha2::{Digest, Sha256};
 use urlencoding::decode;
 use std::collections::HashMap;
+//use handlers::{handle_connection, init_db};
 
 
 extern "C" {
@@ -55,6 +59,27 @@ fn main() -> Result<(), Box<dyn Error>>{
     Ok(())
 }
 
+fn serve_static(path: &str, stream: &mut TcpStream) -> Result<(), Box<dyn Error>> {
+    match std::fs::read(path) {
+        Ok(contents) => {
+            let content_type = get_content_type(path);
+            let response = format!(
+                "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: {}\r\n\r\n",
+                contents.len(),
+                content_type
+                );
+            stream.write_all(response.as_bytes())?;
+            stream.write_all(&contents)?;
+        }
+        Err(_) => {
+            let response = not_found_response();
+            stream.write_all(response.as_bytes())?;
+        }
+    }
+    stream.flush()?;
+    Ok(())
+}
+
 fn handle_connection(mut stream: std::net::TcpStream) -> Result<(), Box<dyn Error>> {
     let mut buffer = [0; 1024];
     let bytes_read = stream.read(&mut buffer)?;
@@ -76,6 +101,11 @@ fn handle_connection(mut stream: std::net::TcpStream) -> Result<(), Box<dyn Erro
         path,
         now
     );
+
+    if path.starts_with("/static/"){
+        let file_path = &path[1..];
+        return serve_static(file_path, &mut stream);
+    }
 
     //stream.read(&mut buffer).unwrap();
     //println!("Request: {}", String::from_utf8_lossy(&buffer[..bytes_read]));
