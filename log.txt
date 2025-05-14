@@ -64941,3 +64941,33 @@
 [127.0.0.1] / requested / at 2025-05-14 09:36:18
 [127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-14 09:36:18
 [127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-14 09:36:18
+[127.0.0.1] / requested / at 2025-05-14 10:08:17
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-14 10:08:17
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-14 10:08:17
+[127.0.0.1] / requested / at 2025-05-14 11:16:30
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-14 11:16:30[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-14 11:16:30
+
+[127.0.0.1] /admin requested /admin at 2025-05-14 11:16:34
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:39
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:39
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:39
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:40
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:45
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-14 11:16:45
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /files requested /files at 2025-05-14 11:16:54
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:19:09
+[127.0.0.1] / requested / at 2025-05-14 11:20:32
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:20:32
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:20:34
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:20:35
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:20:35
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:25:48
+[127.0.0.1] /upload requested /upload at 2025-05-14 11:25:57
+[127.0.0.1] / requested / at 2025-05-14 11:25:57
+Connection error: IO error: The system cannot find the path specified. (os error 3)

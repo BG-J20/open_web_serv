@@ -2,6 +2,8 @@ use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 use std::error::Error;
+use std::fs;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use rusqlite::Connection;
 
@@ -68,6 +70,13 @@ impl std::fmt::Display for HttpError {
 
 impl std::error::Error for HttpError {}
 
+fn get_timestamp() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
+}
+
 pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
     let mut buffer = [0; 1024];
     let bytes_read = stream.read(&mut buffer)?;
@@ -93,6 +102,16 @@ pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
         return handle_login(&request, &mut stream);
     } else if path == "/admin" {
         return handle_admin_panel(&mut stream);
+    } else if path == "/admin/files" {
+        return handle_file_manager(&mut stream);
+    } else if request.starts_with("POST /upload") {
+        return handle_upload(&request, &mut stream);
+    } else if path.starts_with("/files/"){
+        let filename = &path["/files/".len()..];
+        let filepath = format!("uploads/{}", filename);
+        return serve_static(&filepath, &mut stream);
+    } else if path == "/upload" {
+        return serve_file("upload.html", &mut stream);
     }
 
     let filename = match path {
@@ -271,6 +290,44 @@ pub fn handle_admin_panel(stream: &mut TcpStream) -> Result<(), HttpError> {
     stream.flush()?;
     Ok(())
 
+}
 
+fn handle_file_manager(stream: &mut TcpStream) -> Result<(), HttpError> {
+    let files = fs::read_dir("uploads")?
+        .filter_map(Result::ok)
+        .filter(|e| e.path().is_file())
+        .map(|e| {
+            let name = e.file_name().into_string().unwrap_or_default();
+            format!(r#"<li><a href="/files/{}">{}</a></li>"#, name, name)
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
 
+    let mut html = std::fs::read_to_string("file_manager.html")?;
+    html = html.replace("{{FILES}}", &files);
+
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+        html.len(),
+        html
+    );
+
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
+    Ok(())
+}
+
+fn handle_upload(request: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
+    if let Some(body_start) = request.find("\r\n\r\n") {
+        let body = &request[body_start + 4..];
+
+        // Заглушка: сохраняем всё тело как один файл (небезопасно)
+        let filename = format!("uploads/uploaded_{}.bin", get_timestamp());
+        std::fs::write(&filename, body.as_bytes())?;
+    }
+
+    // Перенаправляем обратно
+    let response = "HTTP/1.1 303 See Other\r\nLocation: /admin/files\r\n\r\n";
+    stream.write_all(response.as_bytes())?;
+    Ok(())
 }

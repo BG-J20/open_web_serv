@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Файловый менеджер</title>
+</head>
+<body>
+<h2>Файлы на сервере</h2>
+<ul>
+    {{FILES}}
+</ul>
+
+<h3>Загрузить новый файл</h3>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit">Загрузить</button>
+</form>
+</body>
+</html>
