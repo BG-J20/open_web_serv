@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::TcpStream;
+use std::error::Error;
 
 use rusqlite::Connection;
 
@@ -13,7 +14,30 @@ pub enum HttpError {
     Sqlite(rusqlite::Error),
     Other(String),
 }
+/*
+#[derive(Debug)]
+pub struct HttpError {
+    pub message: String,
+}
 
+impl From<std::io::Error> for HttpError {
+    fn from (e: std::io::Error) -> Self {
+        HttpError {message: e.to_string()}
+    }
+}
+
+impl From<rusqlite::Error> for HttpError {
+    fn from (e: rusqlite::Error) -> Self {
+        HttpError {message: e.to_string()}
+    }
+}
+
+impl From<Box<dyn std::error::Error>> for HttpError {
+    fn from (e: Box<dyn std::error::Error>) -> Self {
+        HttpError {message: e.to_string()}
+    }
+}
+*/
 impl From<std::io::Error> for HttpError {
     fn from(err: std::io::Error) -> Self {
         HttpError::Io(err)
@@ -67,6 +91,8 @@ pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
         return handle_register(&request, &mut stream);
     } else if request.starts_with("POST /login") {
         return handle_login(&request, &mut stream);
+    } else if path == "/admin" {
+        return handle_admin_panel(&mut stream);
     }
 
     let filename = match path {
@@ -196,4 +222,55 @@ fn get_content_type(path: &str) -> &str {
         Some("txt") => "text/plain",
         _ => "application/octet-stream",
     }
+}
+
+pub fn handle_admin_panel(stream: &mut TcpStream) -> Result<(), HttpError> {
+    //let conn = Connection::open("user.db")?;
+    let conn = Connection::open("users.db").map_err(HttpError::from)?;
+
+    let mut stmt = conn.prepare("SELECT id, username FROM users")?;
+    let users_iter = stmt.query_map([], |row| {
+        Ok((row.get::<_, i32>(0)?, row.get::<_, String>(1)?))
+    })?;
+
+    let mut table_rows = String::new();
+    for user in users_iter {
+        let (id, username) = user?;
+        table_rows.push_str(&format!("<tr><td>{}</td><td>{}</td></tr>", id, username));
+    }
+
+    let html = format!(r#"
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Админ-панель</title>
+            <style>
+                table {{ border-collapse: collapse; width: 50%; }}
+                th, td {{ border: 1px solid black; padding: 8px; }}
+            </style>
+        </head>
+        <body>
+            <h1>Админ-панель</h1>
+            <table>
+                <tr><th>ID</th><th>Имя пользователя</th></tr>
+                {}
+            </table>
+            <p><a href="/">На главную</a></p>
+        </body>
+        </html>
+    "#, table_rows);
+
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+        html.len(),
+        html
+    );
+
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
+    Ok(())
+
+
+
 }
