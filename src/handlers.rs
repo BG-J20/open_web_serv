@@ -96,40 +96,31 @@ pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
         return serve_static(file_path, &mut stream);
     }
 
+    //POST - request
     if request.starts_with("POST /register") {
         return handle_register(&request, &mut stream);
     } else if request.starts_with("POST /login") {
         return handle_login(&request, &mut stream);
-    } else if path == "/admin" {
-        return handle_admin_panel(&mut stream);
-    } else if path == "/admin/files" {
-        return handle_file_manager(&mut stream);
+    } else if request.starts_with("POST /save") {
+        return handle_save(&request, &mut stream);
     } else if request.starts_with("POST /upload") {
         return handle_upload(&request, &mut stream);
-    } else if path.starts_with("/files/"){
-        let filename = &path["/files/".len()..];
-        let filepath = format!("uploads/{}", filename);
-        return serve_static(&filepath, &mut stream);
-    } else if path == "/upload" {
-        return serve_file("upload.html", &mut stream);
     }
 
-    let filename = match path {
-        "/" => Some("index.html"),
-        "/about" => Some("about.html"),
-        "/register" => Some("register.html"),
-        _ => None,
-    };
-
-    if let Some(filename) = filename {
-        serve_file(filename, &mut stream)?;
-    } else {
-        let response = not_found_response();
-        stream.write_all(response.as_bytes())?;
-        stream.flush()?;
+    //GET - request
+    match path {
+        "/" => serve_file("index.html", &mut stream),
+        "/about" => serve_file("about.html", &mut stream),
+        "/register" => serve_file("register.html", &mut stream),
+        "/files" => list_files(&mut stream), //новый маршрут для отображения файлов
+        _=> {
+            //возвращаем 404 для неизвестных маршрутов
+            let response = not_found_response();
+            stream.write_all(response.as_bytes())?;
+            stream.flush()?;
+            Ok(())
+        }
     }
-
-    Ok(())
 }
 
 fn serve_static(path: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
@@ -172,6 +163,73 @@ fn serve_file(filename: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
     }
     stream.flush()?;
     Ok(())
+}
+
+fn list_files(stream: &mut TcpStream) -> Result<(), HttpError> {
+    let mut files_list = String::from("<table><tr><th>Имя файла</th><th>Размер (байт)</th><th>Изменен</th></tr>");
+    // PATH FOLDER static/
+    let static_dir = std::path::Path::new("static");
+
+    if static_dir.exists() {
+        //read folder
+        for entry in fs::read_dir(static_dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            //get metadata (size, time, change time)
+            let metadata = entry.metadata()?;
+            let file_name = path.strip_prefix("static/").unwrap_or(&path).to_string_lossy();
+            //file size in bytes
+            let size = metadata.len();
+            //time last change
+            let modified = metadata.modified().unwrap_or(SystemTime::UNIX_EPOCH);
+            let modified_secs = modified.duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+            let modified_time = get_formatted_time();
+
+            // Добавляем строку таблицы с именем, размером и временем
+            files_list.push_str(&format!(
+                "<tr><td><a href=\"/static/{}\">{}</a></td><td>{}</td><td>{}</td></tr>",
+                file_name, file_name, size, modified_time
+            ));
+        }
+    }
+else {
+    // Если папка отсутствует, показываем сообщение
+    files_list.push_str("<tr><td colspan=\"3\">Папка static отсутствует</td></tr>");
+}
+    files_list.push_str("</table>");
+    // Формируем HTML-страницу
+    let body = format!(
+        r#"<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Файловый менеджер</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        table {{ border-collapse: collapse; width: 100%; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+        th {{ background-color: #f2f2f2; }}
+    </style>
+</head>
+<body>
+    <h1>Файловый менеджер</h1>
+    <p><a href="/upload">Загрузить файл</a> | <a href="/">На главную</a></p>
+    {}
+</body>
+</html>"#,
+        files_list
+    );
+
+    // Формируем HTTP-ответ
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+        body.len(),
+        body
+    );
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
+    Ok(())
+
 }
 
 fn handle_register(request: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
@@ -318,16 +376,115 @@ fn handle_file_manager(stream: &mut TcpStream) -> Result<(), HttpError> {
 }
 
 fn handle_upload(request: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
-    if let Some(body_start) = request.find("\r\n\r\n") {
-        let body = &request[body_start + 4..];
+    // Извлекаем boundary из Content-Type для парсинга multipart/form-data
+    let boundary = request
+        .lines()
+        .find(|line| line.starts_with("Content-Type: multipart/form-data"))
+        .and_then(|line| line.split("boundary=").nth(1))
+        .ok_or_else(|| HttpError::Other("Missing boundary".to_string()))?;
 
-        // Заглушка: сохраняем всё тело как один файл (небезопасно)
-        let filename = format!("uploads/uploaded_{}.bin", get_timestamp());
-        std::fs::write(&filename, body.as_bytes())?;
+    // Получаем тело запроса
+    let body = request.split("\r\n\r\n").nth(1).unwrap_or("");
+    // Разделяем тело на части по boundary
+    let parts = body.split(&format!("--{}", boundary)).filter(|part| !part.trim().is_empty() && part != "--");
+
+    let mut file_name = String::new();
+    let mut file_content = Vec::new();
+
+    // Парсим каждую часть
+    for part in parts {
+        if part.contains("Content-Disposition: form-data") {
+            // Извлекаем имя файла из заголовка filename
+            if let Some(name_line) = part.lines().find(|line| line.contains("filename=")) {
+                if let Some(name) = name_line.split("filename=\"").nth(1).and_then(|s| s.split("\"").next()) {
+                    file_name = name.to_string();
+                }
+            }
+            // Извлекаем содержимое файла (после двойного \r\n\r\n)
+            if let Some(content_start) = part.find("\r\n\r\n") {
+                let content = &part[content_start + 4..];
+                let content_end = content.rfind("\r\n").unwrap_or(content.len());
+                file_content = content[..content_end].as_bytes().to_vec();
+            }
+        }
     }
 
-    // Перенаправляем обратно
-    let response = "HTTP/1.1 303 See Other\r\nLocation: /admin/files\r\n\r\n";
+    // Проверяем, получены ли имя и содержимое
+    if file_name.is_empty() || file_content.is_empty() {
+        return Err(HttpError::Other("Invalid file upload".to_string()));
+    }
+
+    // Создаем папку static/uploads/, если не существует
+    fs::create_dir_all("static/uploads")?;
+    // Формируем путь для сохранения файла
+    let file_path = format!("static/uploads/{}", file_name);
+    // Сохраняем файл с помощью std::fs::write
+    fs::write(&file_path, &file_content)?;
+
+    // Логируем успешную загрузку
+    let log_entry = format!("Uploaded file {} at {}", file_name, get_formatted_time());
+    log_to_file(&log_entry)?;
+
+    // Формируем HTML-ответ с подтверждением
+    let response_body = format!(
+        r#"<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Успех</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Файл {} загружен</h1>
+    <p><a href="/files">Посмотреть файлы</a> | <a href="/upload">Загрузить ещё</a> | <a href="/">На главную</a></p>
+</body>
+</html>"#,
+        file_name
+    );
+
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+        response_body.len(),
+        response_body
+    );
     stream.write_all(response.as_bytes())?;
+    stream.flush()?;
     Ok(())
 }
+
+fn handle_save(request: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
+    // Извлекаем тело запроса
+    let body = request.split("\r\n\r\n").nth(1).unwrap_or("");
+    // Парсим данные формы (application/x-www-form-urlencoded)
+    let form_data = parse_form_data(body);
+    let content = form_data.get("content").cloned().unwrap_or_default();
+    let filename = "user_content.txt";
+
+    // Сохраняем текст в файл
+    fs::write(filename, content.as_bytes())?;
+
+    // Формируем HTML-ответ
+    let response_body = r#"<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Успех</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Данные сохранены</h1>
+    <p><a href="/">Вернуться на главную</a></p>
+</body>
+</html>"#;
+
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
+        response_body.len(),
+        response_body
+    );
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
+    Ok(())
+}
+
+

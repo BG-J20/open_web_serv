@@ -64971,3 +64971,32 @@ Connection error: IO error: The system cannot find the path specified. (os error
 [127.0.0.1] /upload requested /upload at 2025-05-14 11:25:57
 [127.0.0.1] / requested / at 2025-05-14 11:25:57
 Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] / requested / at 2025-05-16 16:15:35
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-16 16:15:35[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-16 16:15:35
+
+[127.0.0.1] /admin requested /admin at 2025-05-16 16:15:38
+[127.0.0.1] /favicon.ico requested /favicon.ico at 2025-05-16 16:15:38
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:15:46
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:15:48
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:15:48
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:15:48
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:15:53
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:23
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:23
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:23
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:47
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:48
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:48
+Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:50
+Connection error: IO error: The system cannot find the path specified. (os error 3)
