@@ -65000,3 +65000,285 @@ Connection error: IO error: The system cannot find the path specified. (os error
 Connection error: IO error: The system cannot find the path specified. (os error 3)
 [127.0.0.1] /admin/files requested /admin/files at 2025-05-16 16:16:50
 Connection error: IO error: The system cannot find the path specified. (os error 3)
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-17 01:04:29
+[127.0.0.1] /admin/files requested /admin/files at 2025-05-17 01:04:32
+[127.0.0.1] / requested / at 2025-05-17 01:04:35
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:04:36
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 01:04:36
+[127.0.0.1] /save requested /save at 2025-05-17 01:04:49
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:04:49
+[127.0.0.1] / requested / at 2025-05-17 01:04:52
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:04:52
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 01:04:52
+[127.0.0.1] /files requested /files at 2025-05-17 01:04:54
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:04:54
+[127.0.0.1] /static/files requested /static/files at 2025-05-17 01:05:00
+[127.0.0.1] /upload requested /upload at 2025-05-17 01:05:06
+[127.0.0.1] / requested / at 2025-05-17 01:05:18
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:05:18
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 01:05:18
+[127.0.0.1] /upload requested /upload at 2025-05-17 01:05:20
+[127.0.0.1] /files requested /files at 2025-05-17 01:05:49
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:05:49
+[127.0.0.1] /files requested /files at 2025-05-17 01:06:26
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:06:26
+[127.0.0.1] /static/files requested /static/files at 2025-05-17 01:06:28
+[127.0.0.1] / requested / at 2025-05-17 01:07:34[127.0.0.1] / requested / at 2025-05-17 01:07:34
+
+[127.0.0.1] / requested / at 2025-05-17 01:07:35
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:07:35
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 01:07:35
+[127.0.0.1] /files requested /files at 2025-05-17 01:07:36
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:07:36
+[127.0.0.1] /static/files requested /static/files at 2025-05-17 01:07:38
+[127.0.0.1] / requested / at 2025-05-17 01:07:54
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:07:54
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 01:07:54
+[127.0.0.1] /files requested /files at 2025-05-17 01:07:55
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:07:55
+[127.0.0.1] /files requested /files at 2025-05-17 01:08:08
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 01:08:09
+[127.0.0.1] /upload requested /upload at 2025-05-17 01:08:11
+[127.0.0.1] / requested / at 2025-05-17 01:11:21[127.0.0.1] / requested / at 2025-05-17 01:11:21
+
+[127.0.0.1] / requested / at 2025-05-17 19:39:51
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 19:39:51
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 19:39:51
+[127.0.0.1] /files requested /files at 2025-05-17 19:39:55
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 19:39:55
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:40:12
+[127.0.0.1] / requested / at 2025-05-17 20:40:15
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:40:15
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 20:40:15
+[127.0.0.1] /files requested /files at 2025-05-17 20:40:17
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:40:17
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:40:22
+[127.0.0.1] / requested / at 2025-05-17 20:40:25
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:40:25
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 20:40:25
+[127.0.0.1] /files requested /files at 2025-05-17 20:40:27
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:40:27
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:40:32
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:41:02
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:41:03
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:41:35
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:41:36
+[127.0.0.1] /uploads requested /uploads at 2025-05-17 20:41:39
+[127.0.0.1] / requested / at 2025-05-17 20:41:42
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:41:42
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 20:41:42
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:41:44
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:44:50
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:44:50
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:44:59
+Connection error: Error: Invalid file upload
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:44:59
+Connection error: Error: Invalid file upload
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:44:59
+Connection error: Error: Invalid file upload
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:22
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:22
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:22
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 20:59:26
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:59:26
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 20:59:26
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:28
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 20:59:28
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:34
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:34
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 20:59:34
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:02:38
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:02:42
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:02:42
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:02:42
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:02:45
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:02:45
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:02:49
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:02:49
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:02:49
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:05:19
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:05:21
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:05:21
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:05:21
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:05:23
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:05:23
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:05:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:05:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:05:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:08:43
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:08:43
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:08:43
+[127.0.0.1] /files requested /files at 2025-05-17 21:08:45
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:08:45
+[127.0.0.1] /static/img requested /static/img at 2025-05-17 21:08:47
+[127.0.0.1] / requested / at 2025-05-17 21:08:49
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:08:49
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:08:49
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:08:52
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:08:52
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:08:54
+Failed upload: file_name='', content_len=2 at 2025-05-17 21:08:54
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:08:54
+Failed upload: file_name='', content_len=2 at 2025-05-17 21:08:54
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:08:58
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:08:58
+[127.0.0.1] / requested / at 2025-05-17 21:08:59
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:03
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:03
+Connection error: Error: Invalid file upload: missing file name or content[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:03
+
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:03
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:03
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:03
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:09:40
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:09:40
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:09:40
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:42
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:09:42
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:50
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:50
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:50
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:50
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:09:50
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:09:50
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:13:11
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:13:11
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:13:11
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:13:13
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:13:13
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:13:19
+Upload body (first 500 chars):  at 2025-05-17 21:13:19
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:13:19
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:13:19
+Upload body (first 500 chars):  at 2025-05-17 21:13:19
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:13:19
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:13:19
+Upload body (first 500 chars):  at 2025-05-17 21:13:19
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:13:19
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:16:20
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:16:20
+[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:16:20
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:16:23
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:16:23
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:16:29
+Upload body (first 1000 chars):  at 2025-05-17 21:16:29
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:16:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:16:29
+Upload body (first 1000 chars):  at 2025-05-17 21:16:29
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:16:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:16:29
+Upload body (first 1000 chars):  at 2025-05-17 21:16:29
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:16:29
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] / requested / at 2025-05-17 21:19:28
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:19:28[127.0.0.1] /static/img/logo.png requested /static/img/logo.png at 2025-05-17 21:19:28
+
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:19:31
+[127.0.0.1] /static/styles.css requested /static/styles.css at 2025-05-17 21:19:31
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:19:35
+Full request (first 1000 chars): POST /upload HTTP/1.1
+Host: 127.0.0.1:7878
+Connection: keep-alive
+Content-Length: 7288
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+Origin: http://127.0.0.1:7878
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryIKhc8N0KJoqSsBgw
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1:7878/upload
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: uk,en-US;q=0.9,en;q=0.8,ru;q=0.7
+
+ at 2025-05-17 21:19:35
+Content-Length: 7288 at 2025-05-17 21:19:35
+Upload body (first 1000 chars):  at 2025-05-17 21:19:35
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:19:35
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:19:35
+Full request (first 1000 chars): POST /upload HTTP/1.1
+Host: 127.0.0.1:7878
+Connection: keep-alive
+Content-Length: 7288
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+Origin: http://127.0.0.1:7878
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryIKhc8N0KJoqSsBgw
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1:7878/upload
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: uk,en-US;q=0.9,en;q=0.8,ru;q=0.7
+
+ at 2025-05-17 21:19:35
+Content-Length: 7288 at 2025-05-17 21:19:35
+Upload body (first 1000 chars):  at 2025-05-17 21:19:35
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:19:35
+Connection error: Error: Invalid file upload: missing file name or content
+[127.0.0.1] /upload requested /upload at 2025-05-17 21:19:35
+Full request (first 1000 chars): POST /upload HTTP/1.1
+Host: 127.0.0.1:7878
+Connection: keep-alive
+Content-Length: 7288
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+Origin: http://127.0.0.1:7878
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryIKhc8N0KJoqSsBgw
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1:7878/upload
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: uk,en-US;q=0.9,en;q=0.8,ru;q=0.7
+
+ at 2025-05-17 21:19:35
+Content-Length: 7288 at 2025-05-17 21:19:35
+Upload body (first 1000 chars):  at 2025-05-17 21:19:35
+Failed upload: file_name='', content_len=0 at 2025-05-17 21:19:35
+Connection error: Error: Invalid file upload: missing file name or content

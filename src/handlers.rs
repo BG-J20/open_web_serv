@@ -78,7 +78,7 @@ fn get_timestamp() -> u64 {
 }
 
 pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
-    let mut buffer = [0; 1024];
+    let mut buffer = [0; 8192];
     let bytes_read = stream.read(&mut buffer)?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]);
     let client_ip = stream.peer_addr()?.ip().to_string();
@@ -113,6 +113,7 @@ pub fn handle_connection(mut stream: TcpStream) -> Result<(), HttpError> {
         "/about" => serve_file("about.html", &mut stream),
         "/register" => serve_file("register.html", &mut stream),
         "/files" => list_files(&mut stream), //новый маршрут для отображения файлов
+        "/upload" => serve_file("upload.html", &mut stream),
         _=> {
             //возвращаем 404 для неизвестных маршрутов
             let response = not_found_response();
@@ -375,50 +376,118 @@ fn handle_file_manager(stream: &mut TcpStream) -> Result<(), HttpError> {
     Ok(())
 }
 
+// Обрабатывает загрузку файлов через POST /upload
 fn handle_upload(request: &str, stream: &mut TcpStream) -> Result<(), HttpError> {
-    // Извлекаем boundary из Content-Type для парсинга multipart/form-data
+    // Логируем полный запрос для отладки
+    let log_entry = format!(
+        "Full request (first 1000 chars): {} at {}",
+        request.chars().take(1000).collect::<String>(),
+        get_formatted_time()
+    );
+    log_to_file(&log_entry)?;
+
+    // Извлекаем Content-Length для проверки размера тела
+    let content_length = request
+        .lines()
+        .find(|line| line.starts_with("Content-Length:"))
+        .and_then(|line| line.split_whitespace().nth(1))
+        .and_then(|s| s.parse::<usize>().ok())
+        .unwrap_or(0);
+    let log_entry = format!("Content-Length: {} at {}", content_length, get_formatted_time());
+    log_to_file(&log_entry)?;
+
+    // Извлекаем boundary из заголовка Content-Type
     let boundary = request
         .lines()
         .find(|line| line.starts_with("Content-Type: multipart/form-data"))
         .and_then(|line| line.split("boundary=").nth(1))
-        .ok_or_else(|| HttpError::Other("Missing boundary".to_string()))?;
+        .map(|s| s.trim())
+        .ok_or_else(|| HttpError::Other("Missing boundary in Content-Type".to_string()))?;
 
-    // Получаем тело запроса
-    let body = request.split("\r\n\r\n").nth(1).unwrap_or("");
+    // Формируем boundary с префиксом "--"
+    let boundary_str = format!("--{}", boundary);
+
+    // Извлекаем тело запроса
+    let body = request
+        .splitn(2, "\r\n\r\n")
+        .nth(1)
+        .ok_or_else(|| HttpError::Other("Invalid request body".to_string()))?;
+
+    // Логируем тело запроса
+    let log_entry = format!(
+        "Upload body (first 1000 chars): {} at {}",
+        body.chars().take(1000).collect::<String>(),
+        get_formatted_time()
+    );
+    log_to_file(&log_entry)?;
+
     // Разделяем тело на части по boundary
-    let parts = body.split(&format!("--{}", boundary)).filter(|part| !part.trim().is_empty() && part != "--");
+    let parts = body.split(&boundary_str).filter(|part| {
+        let trimmed = part.trim();
+        !trimmed.is_empty() && trimmed != "--" && trimmed != "--\r\n" && !trimmed.starts_with("--")
+    });
 
     let mut file_name = String::new();
     let mut file_content = Vec::new();
 
-    // Парсим каждую часть
+    // Обрабатываем каждую часть multipart
     for part in parts {
-        if part.contains("Content-Disposition: form-data") {
-            // Извлекаем имя файла из заголовка filename
-            if let Some(name_line) = part.lines().find(|line| line.contains("filename=")) {
-                if let Some(name) = name_line.split("filename=\"").nth(1).and_then(|s| s.split("\"").next()) {
-                    file_name = name.to_string();
+        let log_entry = format!(
+            "Processing part (first 500 chars): {} at {}",
+            part.chars().take(500).collect::<String>(),
+            get_formatted_time()
+        );
+        log_to_file(&log_entry)?;
+
+        // Проверяем наличие Content-Disposition и name="file"
+        if part.contains("Content-Disposition: form-data") && part.contains("name=\"file\"") {
+            // Извлекаем имя файла
+            let lines: Vec<&str> = part.lines().collect();
+            for line in &lines {
+                if line.contains("filename=\"") && !line.contains("filename=\"\"") {
+                    if let Some(name) = line
+                        .split("filename=\"")
+                        .nth(1)
+                        .and_then(|s| s.split('\"').next())
+                        .filter(|s| !s.is_empty())
+                    {
+                        file_name = name.to_string();
+                        break;
+                    }
                 }
             }
-            // Извлекаем содержимое файла (после двойного \r\n\r\n)
+
+            // Извлекаем содержимое файла
             if let Some(content_start) = part.find("\r\n\r\n") {
                 let content = &part[content_start + 4..];
-                let content_end = content.rfind("\r\n").unwrap_or(content.len());
-                file_content = content[..content_end].as_bytes().to_vec();
+                let content_end = content
+                    .rfind("\r\n--")
+                    .filter(|&end| end > 0)
+                    .unwrap_or_else(|| content.rfind("\r\n").unwrap_or(content.len()));
+                if content_end > 0 {
+                    file_content = content[..content_end].as_bytes().to_vec();
+                }
             }
         }
     }
 
-    // Проверяем, получены ли имя и содержимое
+    // Проверяем, были ли извлечены имя и содержимое файла
     if file_name.is_empty() || file_content.is_empty() {
-        return Err(HttpError::Other("Invalid file upload".to_string()));
+        let log_entry = format!(
+            "Failed upload: file_name='{}', content_len={} at {}",
+            file_name, file_content.len(), get_formatted_time()
+        );
+        log_to_file(&log_entry)?;
+        return Err(HttpError::Other("Invalid file upload: missing file name or content".to_string()));
     }
 
-    // Создаем папку static/uploads/, если не существует
+    // Создаем папку static/uploads/
     fs::create_dir_all("static/uploads")?;
+
     // Формируем путь для сохранения файла
     let file_path = format!("static/uploads/{}", file_name);
-    // Сохраняем файл с помощью std::fs::write
+
+    // Сохраняем файл
     fs::write(&file_path, &file_content)?;
 
     // Логируем успешную загрузку
@@ -442,13 +511,17 @@ fn handle_upload(request: &str, stream: &mut TcpStream) -> Result<(), HttpError>
         file_name
     );
 
+    // Формируем HTTP-ответ
     let response = format!(
         "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: text/html\r\n\r\n{}",
         response_body.len(),
         response_body
     );
+
+    // Отправляем ответ клиенту
     stream.write_all(response.as_bytes())?;
     stream.flush()?;
+
     Ok(())
 }
 
